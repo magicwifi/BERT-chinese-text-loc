@@ -27,9 +27,6 @@ endpoint_article = 'http://127.0.0.1:8600'
 
 
 
-####
-
-
 import tensorflow as tf
 import numpy as np
 import codecs
@@ -42,8 +39,8 @@ from bert_base.bert import tokenization, modeling
 from bert_base.train.train_helper import get_args_parser
 args = get_args_parser()
 
-model_dir = r'/Users/zhuangzhuanghuang/Code/ner_model'
-bert_dir = '/Users/zhuangzhuanghuang/Code/chinese_L-12_H-768_A-12'
+model_dir = '/dev/ner_model'
+bert_dir = '/dev/chinese_L-12_H-768_A-12'
 
 is_training=False
 use_one_hot_embeddings=False
@@ -386,7 +383,10 @@ if __name__ == '__main__':
     #classes = set(D[2].unique())
     write_file = open('result_id_entity.csv', 'w')
     for d in tqdm(iter(test_data)):
-        person, loc, org  =predict_online(d[1])
+        str_loc = d[1].strip()
+        if len(str_loc) <=10:
+            continue;
+        person, loc, org  =predict_online(str_loc)
         values = loc.split()
         #print(values)
         org_arr = []
